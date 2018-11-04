@@ -56,6 +56,9 @@ namespace Code
 
           //s.LookupParameter("底部标高").Set("STR_1F");// 
           //s.LookupParameter("顶部标高").Set("STR_2F（5.760）");// 
+          var levels = new FilteredElementCollector(doc).OfClass(typeof(level)).ToArray();
+          doc.Crete.NewFamilyInstance(XYZ.Zero,s,levels[0],StructuralType.Column);
+          doc.Crete.NewFamilyInstance(XYZ.Zero,s,doc.ActiveView);
 
 
           // s.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM).Set("STR_2F（5.760）"); // 
