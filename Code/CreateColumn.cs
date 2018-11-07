@@ -20,7 +20,7 @@ namespace Code
     const string _directory = "C:/ProgramData/Autodesk/RVT 2016/Libraries/China/结构/柱混凝土/";
     const string _path = _directory + _family_name + _extension;
 
-    StructuralType _structural = StructuralType.Column;
+    StructuralType _structural = StructuralType.NonStructural;
 
     public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {
@@ -48,24 +48,36 @@ namespace Code
           s = s1 as FamilySymbol;
 
           s.LookupParameter("b").Set(250 / 304.8); // 
-
-
           s.LookupParameter("h").Set(400 / 304.8); // 
 
+
+          //var topLevelid = s.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM).AsElementId();
+          //Level topLevel = doc.GetElement(topLevelid) as Level;
+          var levels = new FilteredElementCollector(doc).OfClass(typeof(Level)).ToArray();
+          Level baseLevel = Util.GetFirstElementOfTypeNamed(doc, typeof(Level), "STR_2F（5.760）") as Level;
+          Level topLevel = Util.GetFirstElementOfTypeNamed(doc, typeof(Level), "ARC_3F（8.800）") as Level;
+          
+          //if (topLevel.StorageType == StorageType.ElementId)
+          //{
+          //ElementId sValue = topLevel.AsElementId();
+          //topLevel.Set(new ElementId(398741));//Level one
+          // Level top = doc.GetElement(sValue) as Level;
+          //}
+
+
           // s.get_Parameter(BuiltInParameter.FAMILY_BASE_LEVEL_PARAM).SetValueString("STR_1F");// 
-
-          //s.LookupParameter("底部标高").Set("STR_1F");// 
-          //s.LookupParameter("顶部标高").Set("STR_2F（5.760）");// 
-          var levels = new FilteredElementCollector(doc).OfClass(typeof(level)).ToArray();
-          doc.Crete.NewFamilyInstance(XYZ.Zero,s,levels[0],StructuralType.Column);
-          doc.Crete.NewFamilyInstance(XYZ.Zero,s,doc.ActiveView);
-
-
           // s.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM).Set("STR_2F（5.760）"); // 
+          //s.LookupParameter("底部标高").Set("STR_1F");// 
+
+          //var levels = new FilteredElementCollector(doc).OfClass(typeof(Level)).ToArray();
+          //doc.Create.NewFamilyInstance(XYZ.Zero,s,levels[0],StructuralType.Column);
+          // doc.Create.NewFamilyInstance(XYZ.Zero,s,doc.ActiveView);
+
+
 
           // We can change the symbol name at any time:
 
-          s.Name = "250x400mm";
+          s.Name = "250x400mmTest";
 
           // Insert an instance of our new symbol:
 
@@ -90,9 +102,7 @@ namespace Code
               }
             }
           }
-
-
-
+                  
           XYZ p = new XYZ();
           foreach (var item in _points)
           {
@@ -102,7 +112,15 @@ namespace Code
 
           //XYZ p = XYZ.Zero;
           var _familyInstance = doc.Create.NewFamilyInstance(
-            p, s, _structural);
+            p, s,baseLevel,_structural);
+          _familyInstance.get_Parameter(BuiltInParameter.FAMILY_BASE_LEVEL_PARAM).Set(topLevel.Id);
+          //s.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM).Set(topLevel.Id);
+          //Parameter topLevel = s.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM);
+          //if (topLevel.StorageType == StorageType.ElementId)
+          //{
+          //  var sValue = topLevel.AsElementId();
+          //  Level top = doc.GetElement(sValue) as Level;
+          //}
 
           // For a column, the reference direction is ignored:
 
@@ -110,8 +128,9 @@ namespace Code
           //doc.Create.NewFamilyInstance(
           //  p, s, normal, null, nonStructural );
 
-          _familyInstance.get_Parameter(BuiltInParameter.FAMILY_BASE_LEVEL_PARAM).SetValueString("STR_1F");
-          _familyInstance.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM).SetValueString("STR_2F（5.760）");
+          // _familyInstance.get_Parameter(BuiltInParameter.FAMILY_BASE_LEVEL_PARAM).SetValueString("STR_1F");
+          //_familyInstance.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM).SetValueString("STR_2F（5.760）");
+
           TaskDialog.Show("Hello", "OK");
 
           rc = Result.Succeeded;
@@ -121,5 +140,4 @@ namespace Code
       return rc;
     }
   }
-
 }
