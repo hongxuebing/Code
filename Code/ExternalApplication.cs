@@ -27,15 +27,23 @@ namespace Code
     public Result OnStartup(UIControlledApplication application)
     {
       application.CreateRibbonTab("MYAPP");
-      RibbonPanel myPanel = application.CreateRibbonPanel("MYAPP", "放柱");
-      string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
-      PushButtonData pushButtonData = new PushButtonData("innamecreateColumn", "放柱",thisAssemblyPath, "Code.CreateColumn");
-      PushButton pushButton = myPanel.AddItem(pushButtonData) as PushButton;
-      pushButton.ToolTip = "Create Column.";
+      RibbonPanel myPanel = application.CreateRibbonPanel("MYAPP", "ARC");
+      RibbonPanel myPanel2 = application.CreateRibbonPanel("MYAPP", "NEEDS");
 
-      Uri uriImage = new Uri(@"C:\Users\xuebing\source\repos\HelloWorld\HelloWorld\bin\Debug\1-GlobeA_32x32.png");
+      string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
+      PushButtonData pushButtonData = new PushButtonData("CreateColumn", "结构柱",thisAssemblyPath, "Code.CreateColumn");
+      PushButtonData pushButtonData2 = new PushButtonData("PipeCut", "墙套管剪切",thisAssemblyPath, "Code.WallCutPipe");
+      PushButton pushButton = myPanel.AddItem(pushButtonData) as PushButton;
+      PushButton pushButton2 = myPanel.AddItem(pushButtonData2) as PushButton;
+      pushButton.ToolTip = "框选详图线创建结构柱。";
+
+      Uri uriImage = new Uri(@"G:\Resource\01icon\_1.png");
+      Uri uriImage2 = new Uri(@"G:\Resource\01icon\_2.png");
       BitmapImage largeImage = new BitmapImage(uriImage);
+      BitmapImage largeImage2 = new BitmapImage(uriImage2);
       pushButton.LargeImage = largeImage;
+      pushButton2.LargeImage = largeImage2;
+
       return Result.Succeeded;
     }
 

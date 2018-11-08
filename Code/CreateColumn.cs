@@ -13,6 +13,7 @@ namespace Code
 
 {
   [Transaction(TransactionMode.Manual)]
+  [RegenerationAttribute(RegenerationOption.Manual)]
   public class CreateColumn : IExternalCommand
   {
     const string _family_name = "混凝土 - 矩形 - 柱";
