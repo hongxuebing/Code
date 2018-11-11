@@ -59,7 +59,10 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -72,7 +75,14 @@
   <ItemGroup>
     <Compile Include="CmdNewArea.cs" />
     <Compile Include="CreateColumn.cs" />
+    <Compile Include="dbConnection.cs" />
     <Compile Include="ExternalApplication.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
     <Compile Include="PipeCut.cs" />
     <Compile Include="AboutWnd.xaml.cs">
       <DependentUpon>AboutWnd.xaml</DependentUpon>

@@ -47,6 +47,20 @@ namespace Code
       return Result.Succeeded;
     }
 
+    //Load a new icon bitmap from embedded resource.
+    BitmapImage NewBitmapImage(Assembly a ,string imagename)
+    {
+      Stream s = a.GetManifestResourceStream("_Code_"+ imagename);
+      BitmapImage image = new BitmapImage();
+
+      image.BeginInit();
+      image.StreamSource = s;
+      image.EndInit();
+
+      return image;
+
+    }
+
     //private PushButton CreatePushButton(RibbonPanel panel,string name,string text)
     //{
     //  if (null == panel)
