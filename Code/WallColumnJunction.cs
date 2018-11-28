@@ -16,14 +16,14 @@ namespace ClassLibrary1
     {
 
       UIDocument uidoc = commandData.Application.ActiveUIDocument;
-      Document document = uidoc.Document;
-      FilteredElementCollector columnCollecter = new FilteredElementCollector(document);
-      columnCollecter.OfCategory(BuiltInCategory.OST_StructuralColumns).OfClass(typeof(FamilyInstance));
+      Document doc = uidoc.Document;
+      var columnCollecter = new FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_StructuralColumns).OfClass(typeof(FamilyInstance));
       List<FamilyInstance> columnlist = columnCollecter.ToList().ConvertAll(x => x as FamilyInstance);
       foreach (FamilyInstance column in columnlist)
       {
-        ElementIntersectsElementFilter columnIntersectsFilter = new ElementIntersectsElementFilter(column);
-        FilteredElementCollector filteredElementCollector = new FilteredElementCollector(document);
+        var columnIntersectsFilter = new ElementIntersectsElementFilter(column);
+        var filteredElementCollector = new FilteredElementCollector(doc);
+        //文档中过滤出所有和柱相交的元素集合
         List<Element> columnsIntersectList = filteredElementCollector.WherePasses(columnIntersectsFilter).ToList();
 
         var coulmnIntersectList = from elem in columnsIntersectList
@@ -39,24 +39,22 @@ namespace ClassLibrary1
         {
           Transaction ts = new Transaction(document);
           ts.Start("cut");
-          if (JoinGeometryUtils.AreElementsJoined(document, column, elem) == false)
+          if (JoinGeometryUtils.AreElementsJoined(doc, column, elem) == false)
           {
             try
             {
-              JoinGeometryUtils.JoinGeometry(document, elem, column);
+              JoinGeometryUtils.JoinGeometry(doc, elem, column);
             }
             catch
             {
 
             }
-
-
           }
           else
           {
             if (JoinGeometryUtils.IsCuttingElementInJoin(document, column, elem) == false)
             {
-              JoinGeometryUtils.SwitchJoinOrder(document, column, elem);
+              JoinGeometryUtils.SwitchJoinOrder(doc, column, elem);
             }
 
           }
