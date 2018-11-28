@@ -31,6 +31,7 @@ namespace Code
       UIDocument uiDoc = app.ActiveUIDocument;
       Document doc = app.ActiveUIDocument.Document;
 
+      
       Family f = Util.GetFirstElementOfTypeNamed(doc, typeof(Family), _family_name) as Family;
 
       using (Transaction t = new Transaction(doc))
@@ -111,6 +112,8 @@ namespace Code
           }
           p = p / _points.Count;
 
+
+
           //XYZ p = XYZ.Zero;
           var _familyInstance = doc.Create.NewFamilyInstance(
             p, s,baseLevel,_structural);
@@ -131,6 +134,8 @@ namespace Code
 
           // _familyInstance.get_Parameter(BuiltInParameter.FAMILY_BASE_LEVEL_PARAM).SetValueString("STR_1F");
           //_familyInstance.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM).SetValueString("STR_2F（5.760）");
+          //test github
+          //test changes
 
           TaskDialog.Show("Hello", "OK");
 

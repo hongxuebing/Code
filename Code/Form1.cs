@@ -16,5 +16,11 @@ namespace Code
     {
       InitializeComponent();
     }
+
+    private void button1_Click(object sender, EventArgs e)
+    {
+      var createCo =new CreateColumn();
+      
+    }
   }
 }
