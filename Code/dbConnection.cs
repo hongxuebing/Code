@@ -55,8 +55,8 @@ namespace Code.Core
       }
       catch (SqlException e)
       {
-        Console.Write( "Error - Connection.executeSelectQuery - Query: " + _query + " \nException: " + e.StackTrace.ToString());
-                return null;
+        Console.Write("Error - Connection.executeSelectQuery - Query: " + _query + " \nException: " + e.StackTrace.ToString());
+        return null;
       }
       finally
       {
