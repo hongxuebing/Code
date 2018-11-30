@@ -41,7 +41,7 @@ namespace Code
         if (null != f)
         {
           FamilySymbol s = null;
-          foreach (ElementId id in f.GetFamilySymbolIds()) // 2015
+          foreach (ElementId id in f.GetFamilySymbolIds()) 
           {
             s = doc.GetElement(id) as FamilySymbol;
             break;
@@ -49,13 +49,12 @@ namespace Code
           ElementType s1 = s.Duplicate("Nuovo simbolo");
           s = s1 as FamilySymbol;
 
-          s.LookupParameter("b").Set(250 / 304.8); // 
-          s.LookupParameter("h").Set(400 / 304.8); // 
-
+          s.LookupParameter("b").Set(250 / 304.8); 
+          s.LookupParameter("h").Set(400 / 304.8);  
 
           //var topLevelid = s.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM).AsElementId();
           //Level topLevel = doc.GetElement(topLevelid) as Level;
-          var levels = new FilteredElementCollector(doc).OfClass(typeof(Level)).ToArray();
+          //var levels = new FilteredElementCollector(doc).OfClass(typeof(Level)).ToArray();
           Level baseLevel = Util.GetFirstElementOfTypeNamed(doc, typeof(Level), "STR_2F（5.760）") as Level;
           Level topLevel = Util.GetFirstElementOfTypeNamed(doc, typeof(Level), "ARC_3F（8.800）") as Level;
           
@@ -67,8 +66,8 @@ namespace Code
           //}
 
 
-          // s.get_Parameter(BuiltInParameter.FAMILY_BASE_LEVEL_PARAM).SetValueString("STR_1F");// 
-          // s.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM).Set("STR_2F（5.760）"); // 
+          // s.get_Parameter(BuiltInParameter.FAMILY_BASE_LEVEL_PARAM).SetValueString("STR_1F");
+          // s.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM).Set("STR_2F（5.760）");  
           //s.LookupParameter("底部标高").Set("STR_1F");// 
 
           //var levels = new FilteredElementCollector(doc).OfClass(typeof(Level)).ToArray();
@@ -77,14 +76,14 @@ namespace Code
 
 
 
-          // We can change the symbol name at any time:
+          // change the symbol name
 
           s.Name = "250x400mmTest";
 
-          // Insert an instance of our new symbol:
+          // Insert an instance of our new symbol
 
           //IList<Element> _elements = uiDoc.Selection.PickElementsByRectangle(new WallFilter(), "请框选所有需要剪切管道的墙");
-          IList<Element> _lines = uiDoc.Selection.PickElementsByRectangle("请选择详图线");
+          IList<Element> _lines = uiDoc.Selection.PickElementsByRectangle("请框选闭合的柱轮廓线，支持详图线");
 
           List<XYZ> _points = new List<XYZ>();
           foreach (var element in _lines)
@@ -94,14 +93,8 @@ namespace Code
             {
               XYZ p1 = line.GetEndPoint(0);
               XYZ p2 = line.GetEndPoint(1);
-              if (!_points.Contains(p1))
-              {
-                _points.Add(p1);
-              }
-              if (!_points.Contains(p2))
-              {
-                _points.Add(p2);
-              }
+              _points.Add(p1);
+              _points.Add(p2);
             }
           }
                   
@@ -112,9 +105,7 @@ namespace Code
           }
           p = p / _points.Count;
 
-
-
-          //XYZ p = XYZ.Zero;
+         //XYZ p = XYZ.Zero;
           var _familyInstance = doc.Create.NewFamilyInstance(
             p, s,baseLevel,_structural);
           _familyInstance.get_Parameter(BuiltInParameter.FAMILY_BASE_LEVEL_PARAM).Set(topLevel.Id);
