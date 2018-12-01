@@ -52,31 +52,9 @@ namespace Code
           s.LookupParameter("b").Set(250 / 304.8); 
           s.LookupParameter("h").Set(400 / 304.8);  
 
-          //var topLevelid = s.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM).AsElementId();
-          //Level topLevel = doc.GetElement(topLevelid) as Level;
-          //var levels = new FilteredElementCollector(doc).OfClass(typeof(Level)).ToArray();
           Level baseLevel = Util.GetFirstElementOfTypeNamed(doc, typeof(Level), "STR_2F（5.760）") as Level;
           Level topLevel = Util.GetFirstElementOfTypeNamed(doc, typeof(Level), "ARC_3F（8.800）") as Level;
-          
-          //if (topLevel.StorageType == StorageType.ElementId)
-          //{
-          //ElementId sValue = topLevel.AsElementId();
-          //topLevel.Set(new ElementId(398741));//Level one
-          // Level top = doc.GetElement(sValue) as Level;
-          //}
-
-
-          // s.get_Parameter(BuiltInParameter.FAMILY_BASE_LEVEL_PARAM).SetValueString("STR_1F");
-          // s.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM).Set("STR_2F（5.760）");  
-          //s.LookupParameter("底部标高").Set("STR_1F");// 
-
-          //var levels = new FilteredElementCollector(doc).OfClass(typeof(Level)).ToArray();
-          //doc.Create.NewFamilyInstance(XYZ.Zero,s,levels[0],StructuralType.Column);
-          // doc.Create.NewFamilyInstance(XYZ.Zero,s,doc.ActiveView);
-
-
-
-          // change the symbol name
+        
 
           s.Name = "250x400mmTest";
 
@@ -105,29 +83,10 @@ namespace Code
           }
           p = p / _points.Count;
 
-         //XYZ p = XYZ.Zero;
           var _familyInstance = doc.Create.NewFamilyInstance(
             p, s,baseLevel,_structural);
           _familyInstance.get_Parameter(BuiltInParameter.FAMILY_BASE_LEVEL_PARAM).Set(topLevel.Id);
-          //s.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM).Set(topLevel.Id);
-          //Parameter topLevel = s.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM);
-          //if (topLevel.StorageType == StorageType.ElementId)
-          //{
-          //  var sValue = topLevel.AsElementId();
-          //  Level top = doc.GetElement(sValue) as Level;
-          //}
-
-          // For a column, the reference direction is ignored:
-
-          //XYZ normal = new XYZ( 1, 2, 3 );
-          //doc.Create.NewFamilyInstance(
-          //  p, s, normal, null, nonStructural );
-
-          // _familyInstance.get_Parameter(BuiltInParameter.FAMILY_BASE_LEVEL_PARAM).SetValueString("STR_1F");
-          //_familyInstance.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM).SetValueString("STR_2F（5.760）");
-          //test github
-          //test changes
-
+      
           TaskDialog.Show("Hello", "OK");
 
           rc = Result.Succeeded;
