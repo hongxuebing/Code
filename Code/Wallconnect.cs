@@ -41,7 +41,7 @@ namespace WorkCode
         {
           InstanceVoidCutUtils.AddInstanceVoidCut(doc, element1, pipe);
         }
-        new BoundingBoxIsInsideFilter();
+        //new BoundingBoxIsInsideFilter();
         
       }
 
