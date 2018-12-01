@@ -47,10 +47,10 @@ namespace Code
           s.LookupParameter("b").Set(250 / 304.8); 
           s.LookupParameter("h").Set(400 / 304.8);  
 
-          Level baseLevel = Util.GetFirstElementOfTypeNamed(doc, typeof(Level), "STR_2F（5.760）") as Level;
-          Level topLevel = Util.GetFirstElementOfTypeNamed(doc, typeof(Level), "ARC_3F（8.800）") as Level;
+          Level baseLevel = Util.GetFirstElementOfTypeNamed(doc, typeof(Level), "标高 1") as Level;
+          Level topLevel = Util.GetFirstElementOfTypeNamed(doc, typeof(Level), "标高 2") as Level;
 
-          s.Name = "250x400mmTest";
+          s.Name = "250-400mm";
 
           // Insert an instance of our new symbol
 
