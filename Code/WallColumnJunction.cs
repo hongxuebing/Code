@@ -37,7 +37,7 @@ namespace ClassLibrary1
                                   select elem;
         foreach (Element elem in columnsIntersectList)
         {
-          Transaction ts = new Transaction(document);
+          Transaction ts = new Transaction(doc);
           ts.Start("cut");
           if (JoinGeometryUtils.AreElementsJoined(doc, column, elem) == false)
           {
@@ -52,7 +52,7 @@ namespace ClassLibrary1
           }
           else
           {
-            if (JoinGeometryUtils.IsCuttingElementInJoin(document, column, elem) == false)
+            if (JoinGeometryUtils.IsCuttingElementInJoin(doc, column, elem) == false)
             {
               JoinGeometryUtils.SwitchJoinOrder(doc, column, elem);
             }

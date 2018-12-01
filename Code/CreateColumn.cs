@@ -1,10 +1,6 @@
-﻿using System;
-using System.IO;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
-using Autodesk.Revit.ApplicationServices;
-using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Structure;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +27,6 @@ namespace Code
       UIDocument uiDoc = app.ActiveUIDocument;
       Document doc = app.ActiveUIDocument.Document;
 
-      
       Family f = Util.GetFirstElementOfTypeNamed(doc, typeof(Family), _family_name) as Family;
 
       using (Transaction t = new Transaction(doc))
@@ -54,7 +49,6 @@ namespace Code
 
           Level baseLevel = Util.GetFirstElementOfTypeNamed(doc, typeof(Level), "STR_2F（5.760）") as Level;
           Level topLevel = Util.GetFirstElementOfTypeNamed(doc, typeof(Level), "ARC_3F（8.800）") as Level;
-        
 
           s.Name = "250x400mmTest";
 

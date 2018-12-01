@@ -73,7 +73,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CmdNewArea.cs" />
     <Compile Include="CreateColumn.cs" />
     <Compile Include="dbConnection.cs" />
     <Compile Include="ExternalApplication.cs" />
@@ -86,17 +85,8 @@
     <Compile Include="WallColumnJunction.cs" />
     <Compile Include="Wallconnect.cs" />
     <Compile Include="PipeCut.cs" />
-    <Compile Include="AboutWnd.xaml.cs">
-      <DependentUpon>AboutWnd.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Util.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="AboutWnd.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">

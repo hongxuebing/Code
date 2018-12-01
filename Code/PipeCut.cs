@@ -48,7 +48,7 @@ namespace WorkCode
       {
         //FilteredElementCollector collector2 = new FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_PipeAccessory).WhereElementIsNotElementType();
         var collector2 = new FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_PipeAccessory).OfClass(typeof(FamilyInstance));
-        varz pipeIntersectFilter = new ElementIntersectsElementFilter(awall);
+        var pipeIntersectFilter = new ElementIntersectsElementFilter(awall);
         //在所有Pipe中过滤出和每一个墙相交的Pipe然后组成集合
         List<FamilyInstance> pipes = collector2.WherePasses(pipeIntersectFilter).ToList().ConvertAll(x => x as FamilyInstance);
 
