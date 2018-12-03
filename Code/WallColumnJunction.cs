@@ -37,6 +37,7 @@ namespace ClassLibrary1
                                   select elem;
         foreach (Element elem in columnsIntersectList)
         {
+
           Transaction ts = new Transaction(doc);
           ts.Start("cut");
           if (JoinGeometryUtils.AreElementsJoined(doc, column, elem) == false)

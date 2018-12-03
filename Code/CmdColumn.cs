@@ -6,27 +6,14 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB.Structure;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 
 namespace Code
 {
   [Transaction(TransactionMode.Manual)]
-
   class CmdColumn : IExternalCommand
   {
-    //在指定的族样板中创建拉伸体
-    //static void CreateColumnExtrusion(Document doc)
-    //{
-    //  using (Transaction tx = new Transaction(doc))
-    //  {
-    //    tx.Start("Create Column");
-    //    //拾取闭合二维轮廓
-    //    ReferenceArray refer = new ReferenceArray();
-
-    //  }
-    //}
-    Document _doc;
-    Autodesk.Revit.Creation.Application _creapp;
-    Autodesk.Revit.Creation.Document _credoc;
+    ReferenceArray refer = new ReferenceArray();
 
     public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {
@@ -34,28 +21,45 @@ namespace Code
       UIDocument uidoc = uiapp.ActiveUIDocument;
       Document doc = uidoc.Document;
       Application app = doc.Application;
-
-      const string _family_name = "柱";
-      const string _family_path = "D:/" + _family_name + ".rfa";
-
-      string templateFileName = @"C:\ProgramData\Autodesk\RVT 2016\Family Templates\Chinese\公制结构柱.rft";
-      Document familyDocument = app.NewFamilyDocument(templateFileName);
-      ReferenceArray refer = new ReferenceArray();
-      XYZ direction = new XYZ(0, 0, 10);
-
-
       Result rc = Result.Failed;
+
+      const string _family_name = "柱10";
+      const string _family_path = "D:/" + _family_name + ".rfa";
+      //if (File.Exists(_family_path))
+      //{
+      //  File.Delete(_family_path);
+      //}
+
+      //string templateFileName = @"C:\ProgramData\Autodesk\RVT 2016\Family Templates\Chinese\公制结构柱.rft";
+      string templateFileName = @"C:\ProgramData\Autodesk\RVT 2016\Family Templates\Chinese\概念体量\公制体量.rft";
+      Document familyDocument = app.NewFamilyDocument(templateFileName);
+
+
+
+      //Saveas family document
+      SaveAsOptions opt = new SaveAsOptions();
+      opt.OverwriteExistingFile = true;
+
+      familyDocument.SaveAs(_family_path, opt);
+
+      //ReferenceArray refer = new ReferenceArray();
+
       using (Transaction tx = new Transaction(doc))
       {
         tx.Start("Create Column");
 
-
-        if (null == familyDocument)
+        if (!doc.LoadFamily(_family_path))
         {
-          throw new System.Exception("未找到族文档");
+          throw new Exception("没有加载族");
         }
+
+        //if (null == familyDocument)
+        //{
+        //  throw new System.Exception("未找到族文档");
+        //}
         //CreateColumnExtrusion(familyDocument);
         IList<Element> _lines = uidoc.Selection.PickElementsByRectangle("请框选闭合的柱轮廓线，支持详图线");
+
         List<XYZ> points = new List<XYZ>();
 
         foreach (var elem in _lines)
@@ -81,47 +85,78 @@ namespace Code
         }
         p = p / points.Count;
 
-        tx.Commit();
-      }
+        CreateExtrusion(familyDocument);
 
-      CreateExtrusion(familyDocument, refer, direction);
-      //Form form = familyDocument.FamilyCreate.NewExtrusionForm(true, refer, direction);
-
-      //步骤：储存族文档并导入到项目中再修改相关的材质和标高以及名称
-      using (Transaction t2 = new Transaction(doc))
-      {
-        t2.Start("div");
-
-        SaveAsOptions opt = new SaveAsOptions();
-        opt.OverwriteExistingFile = true;
-
-        familyDocument.SaveAs(_family_path, opt);
-
-        if (!doc.LoadFamily(_family_path))
-        {
-          throw new Exception("没有加载族");
-        }
         Family family = new FilteredElementCollector(doc).OfClass(typeof(Family)).Where(x => x.Name.Equals(_family_name)).Cast<Family>().FirstOrDefault();
         FamilySymbol fs = doc.GetElement(family.GetFamilySymbolIds().First()) as FamilySymbol;
 
         //创建族实例
         Level level = doc.ActiveView.GenLevel;
-        FamilyInstance fi = doc.Create.NewFamilyInstance(XYZ.Zero, fs, level, StructuralType.NonStructural);
+        if (!fs.IsActive)
+        {
+          fs.Activate();
+        }
+        FamilyInstance fi = doc.Create.NewFamilyInstance(p, fs, level, StructuralType.NonStructural);
         doc.Regenerate();
         rc = Result.Succeeded;
-        t2.Commit();
+
+        tx.Commit();
       }
+      //步骤：储存族文档并导入到项目中再修改相关的材质和标高以及名称 
       return rc;
     }
-    static void CreateExtrusion(Document doc, ReferenceArray refer, XYZ direction)
+    public void CreateExtrusion(Document doc)
     {
 
       using (Transaction tx = new Transaction(doc))
       {
         tx.Start("Create Column");
+        // Create profile
+
+        //ReferenceArray refar = new ReferenceArray();
+
+        //XYZ[] pts = new XYZ[] { new XYZ(-10, -10, 0), new XYZ(+10, -10, 0), new XYZ(+10, +10, 0), new XYZ(-10, +10, 0) };
+
+        //int j, n = pts.Length;
+
+
+        //for (int i = 0; i < n; ++i)
+        //{
+        //  j = i + 1;
+
+        //  if (j >= n) { j = 0; }
+
+        //  ModelCurve c = MakeLine(doc, pts[i], pts[j]);
+
+        //  refar.Append(c.GeometryCurve.Reference);
+        //}
+        XYZ direction = new XYZ( /*-6*/ 0, 0, 1000 / 304.8);
+
         Form form = doc.FamilyCreate.NewExtrusionForm(true, refer, direction);
+
         tx.Commit();
       }
+    }
+
+    //Create ModelCurve
+    static ModelCurve MakeLine(Document doc, XYZ p, XYZ q)
+    {
+      // Create plane by the points
+
+      Line line = Line.CreateBound(p, q);
+      XYZ norm = p.CrossProduct(q);
+      if (norm.GetLength() == 0) { norm = XYZ.BasisZ; }
+
+      Plane plane = new Plane(norm, q); // 2016
+
+      //Plane plane = Plane.CreateByNormalAndOrigin(norm, q); // 2017
+
+      SketchPlane skplane = SketchPlane.Create(doc, plane);
+
+      // Create line
+
+      return doc.FamilyCreate.NewModelCurve(
+        line, skplane);
     }
   }
 }
