@@ -83,6 +83,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Sender.cs" />
     <Compile Include="WallColumnJunction.cs" />
     <Compile Include="Wallconnect.cs" />
     <Compile Include="PipeCut.cs" />
