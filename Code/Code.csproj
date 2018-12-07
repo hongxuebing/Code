@@ -76,6 +76,8 @@
     <Compile Include="CmdColumnV2.cs" />
     <Compile Include="CmdColumn.cs" />
     <Compile Include="CmdNewBeam.cs" />
+    <Compile Include="CmdSplitBeam.cs" />
+    <Compile Include="CmdTest.cs" />
     <Compile Include="CreateColumn.cs" />
     <Compile Include="dbConnection.cs" />
     <Compile Include="ExternalApplication.cs" />
